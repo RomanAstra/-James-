@@ -8,7 +8,7 @@ namespace Assets.Scripts.Controllers
 
         private void Awake()
         {
-            _FlashLight = FindObjectOfType<FlashLight>();
+            _FlashLight = FindObjectOfType<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().GetComponentInChildren<FlashLight>();
         }
         
         public void On()

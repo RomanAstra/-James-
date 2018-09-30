@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            if (IsOn) Energy -= Time.deltaTime;
+            if (IsOn) Energy += Time.deltaTime;
             if (Energy <= 0)
             {
                 IsEmpty = true;
