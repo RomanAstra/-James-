@@ -4,7 +4,6 @@ namespace Assets.Scripts
 {
     public class Gun : Weapon
     {
-        [Space(20)]
         [SerializeField] private float _gunDamage = 10;
         [SerializeField] private float _gunStandartHolder = 10;
         [Range(0.1f, 0.5f)] [SerializeField] private float _gunRechargeTime = 0.3f;
@@ -27,7 +26,7 @@ namespace Assets.Scripts
 
             if (_IsReady)
             {
-                if (_barrel != null && Physics.Raycast(_barrel.position, _barrel.forward, out Hit, _maxDistance))
+                if (_barrelCamera != null && Physics.Raycast(_barrelCamera.position, _barrelCamera.forward, out Hit, _maxDistance))
                 {
                     Debug.Log("Попал в " + Hit.transform.name);
                     _IsReady = false;

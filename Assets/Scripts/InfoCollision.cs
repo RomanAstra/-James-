@@ -2,25 +2,35 @@
 
 namespace Assets.Scripts
 {
-    public struct InfoCollision
+    public class InfoCollision
     {
-        private readonly float _damage;
-        private readonly ContactPoint _contact;
-        private readonly Transform _transform;
         private readonly Vector3 _dir;
-        /// <summary>
-        /// Хранит информацию об объекте
-        /// </summary>
-        /// <param name="damage">Сила урона</param>
-        /// <param name="contact">Точка контакта</param>
-        /// <param name="transform">Позиция объекта</param>
-        /// <param name="dir">Направление движения</param>
-        public InfoCollision(float damage, ContactPoint contact, Transform transform, Vector3 dir)
+        private readonly float _damage;
+        private readonly ContactPoint _contactPoint;
+        private readonly RaycastHit _hit;
+        private readonly Transform _objCollision;
+
+        public InfoCollision(float damage, ContactPoint contactPoint, Transform objCollision,
+            Vector3 dir = default(Vector3))
         {
-            _damage = damage;
-            _contact = contact;
-            _transform = transform;
             _dir = dir;
+            _damage = damage;
+            _contactPoint = contactPoint;
+            _objCollision = objCollision;
+        }
+
+        public InfoCollision(float damage, RaycastHit hit, Transform objCollision,
+            Vector3 dir = default(Vector3))
+        {
+            _dir = dir;
+            _damage = damage;
+            _hit = hit;
+            _objCollision = objCollision;
+        }
+
+        public Vector3 Dir
+        {
+            get { return _dir; }
         }
 
         public float Damage
@@ -28,19 +38,19 @@ namespace Assets.Scripts
             get { return _damage; }
         }
 
-        public ContactPoint Contact
+        public ContactPoint Point
         {
-            get { return _contact; }
+            get { return _contactPoint; }
+        }
+        
+        public Transform ObjCollision
+        {
+            get { return _objCollision; }
         }
 
-        public Transform Obj
+        public RaycastHit Hit
         {
-            get { return _transform; }
-        }
-
-        public Vector3 Dir
-        {
-            get { return _dir; }
+            get { return _hit; }
         }
     }
 }

@@ -13,12 +13,12 @@ namespace Assets.Scripts
                 _IsCollision = true;
             }
 
-            var tempObj = collision.gameObject.GetComponent<ISetDamage>();
-            if (tempObj != null)
-            {
-                tempObj.SetDamage(new InfoCollision(_curDamage, collision.contacts[0], collision.transform,
-                    Rigidbody.velocity));
-            }
+            //var tempObj = collision.gameObject.GetComponent<ISetDamage>();
+            //if (tempObj != null)
+            //{
+            //    tempObj.SetDamage(new InfoCollision(_curDamage, collision.contacts[0], collision.transform,
+            //        Rigidbody.velocity));
+            //}
         }
 
     }
