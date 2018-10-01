@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Controllers\InputController.cs" />
     <Compile Include="Assets\Scripts\Controllers\WeaponController.cs" />
     <Compile Include="Assets\Scripts\FlashLight.cs" />
+    <Compile Include="Assets\Scripts\Gun.cs" />
     <Compile Include="Assets\Scripts\Helpers\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\Helpers\Timer.cs" />
     <Compile Include="Assets\Scripts\InfoCollision.cs" />

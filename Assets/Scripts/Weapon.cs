@@ -42,7 +42,7 @@ namespace Assets.Scripts
         protected virtual void Reload()
         {
             _IsReady = false;
-            timer.Start(2);
+            timer.Start(1);
 
             _holder -= _curHolder;
             if (_holder > _standartHolder)
