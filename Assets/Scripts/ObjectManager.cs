@@ -7,7 +7,7 @@ namespace Assets.Scripts
     public class ObjectManager : MonoBehaviour
     {
         [SerializeField] private Weapon[] _weapons = new Weapon[2];
-        [SerializeField] private ObjectPool<BulletProjector> _objectPool;
+        //[SerializeField] private ObjectPool<BulletProjector> _objectPool;
         
         public Weapon[] Weapons
         {

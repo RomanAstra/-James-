@@ -26,6 +26,8 @@ namespace Assets.Scripts
         {
             _curHolder = _standartHolder;
             _holder = _curHolder;
+
+            _info = new InfoCollision(_damage, new RaycastHit(), _barrelCamera);
         }
 
         protected virtual void Update()
@@ -52,19 +54,29 @@ namespace Assets.Scripts
                 if (_barrelCamera != null && Physics.Raycast(_barrelCamera.position, _barrelCamera.forward, out Hit, _maxDistance))
                 {
                     Debug.Log("Выстрел");
-                    var tempObj = Hit.collider.GetComponent<ISetDamage>();
-                    
-                    if (tempObj!=null)
+                    if (Hit.transform.GetComponentInChildren<Collider>())
                     {
-                        Debug.Log("Нашел ISetDamage");
-                        tempObj.SetDamage(new InfoCollision(_damage, Hit, Hit.transform));
-
-                        _IsReady = false;
-                        timer.Start(_rechargeTime);
-                        _curHolder--;
-                        maxClip = _holder + _curHolder;
+                        Quaternion _hitRotation = Quaternion.FromToRotation(Hit.normal, -_barrelCamera.position);
+                        Instantiate(_bulletProjector, Hit.point + Hit.normal * 0.2f, _hitRotation);
                     }
+                    _IsReady = false;
+                    timer.Start(_rechargeTime);
+                    _curHolder--;
+                    maxClip = _holder + _curHolder;
                 }
+
+                //if (_barrelCamera != null && Physics.Raycast(_barrelCamera.position, _barrelCamera.forward, out Hit, _maxDistance))
+                //{
+                //    Debug.Log("Выстрел");
+                //    _info.Hit = Hit;
+                //    if (Hit.transform.gameObject.GetComponent<Wall>()!=null) Hit.transform.gameObject.GetComponent<Wall>().SetDamage(_info);
+
+                //    _IsReady = false;
+                //    timer.Start(_rechargeTime);
+                //    _curHolder--;
+                //    maxClip = _holder + _curHolder;
+                //}
+
                 else
                 {
                     Debug.Log("Мимо!");
@@ -89,5 +101,6 @@ namespace Assets.Scripts
             _curHolder = _holder;
             _holder -= _curHolder;
         }
+        
     }
 }

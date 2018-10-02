@@ -6,8 +6,9 @@ namespace Assets.Scripts
     {
         private readonly Vector3 _dir;
         private readonly float _damage;
-        private readonly ContactPoint _contactPoint;
-        private readonly RaycastHit _hit;
+        private ContactPoint _contactPoint;
+        private ContactPoint _contactPoint2;
+        private RaycastHit _hit;
         private readonly Transform _objCollision;
 
         public InfoCollision(float damage, ContactPoint contactPoint, Transform objCollision,
@@ -41,6 +42,7 @@ namespace Assets.Scripts
         public ContactPoint Point
         {
             get { return _contactPoint; }
+            set { _contactPoint = value; }
         }
         
         public Transform ObjCollision
@@ -51,6 +53,13 @@ namespace Assets.Scripts
         public RaycastHit Hit
         {
             get { return _hit; }
+            set { _hit = value; }
+        }
+
+        public ContactPoint Point2
+        {
+            get { return _contactPoint2; }
+            set { _contactPoint2 = value; }
         }
     }
 }
