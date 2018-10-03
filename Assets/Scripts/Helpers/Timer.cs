@@ -2,6 +2,7 @@
 
 namespace Assets.Scripts.Helpers
 {
+    [Serializable]
     public class Timer
     {
         private DateTime _start;

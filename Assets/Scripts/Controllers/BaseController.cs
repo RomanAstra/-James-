@@ -2,6 +2,7 @@
 
 namespace Assets.Scripts.Controllers
 {
+    [System.Serializable]
     public abstract class BaseController : MonoBehaviour
     {
         public bool IsActive { get; set; }

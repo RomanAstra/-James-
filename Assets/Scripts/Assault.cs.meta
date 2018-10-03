@@ -3,7 +3,11 @@ guid: cc43d425d0f487b4780f71253a6ac1cb
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _bulletProjector: {fileID: 4153796687245382, guid: 925ab6498fe348e4eb9790848557935d,
+      type: 2}
+  - _barrelCamera: {fileID: 4406558729975696, guid: 15bd05572d2525f4182fbc6a6ec1586a,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

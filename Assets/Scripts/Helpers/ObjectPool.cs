@@ -9,7 +9,6 @@ namespace Assets.Scripts.Helpers
 {
     public class ObjectPool<T> : MonoBehaviour, IEnumerable where T : BaseObjectScene
     {
-        //private List<T> _objects;
         private T[] _objects;
         private int _check;
         private int _countOf;
@@ -48,8 +47,8 @@ namespace Assets.Scripts.Helpers
 
         public void Reset(T obj)
         {
-            if (obj.IsActive) obj.SetActive(false);
             obj.Rigidbody.velocity = Vector3.zero;
+            if (obj.IsActive) obj.SetActive(false);
             
             _check++;
             if (_check > _countOf) _check = _countOf;
