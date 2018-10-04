@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Helpers;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,31 +7,40 @@ namespace Assets.Scripts
     [System.Serializable]
     public class Patrol
     {
+        /// <summary>
+        /// Подсчет дистанции до игрока.
+        /// </summary>
+        [SerializeField] private float _distance;
+
         private Transform _bot;
         private Transform _player;
         private NavMeshAgent _agent;
-        private Timer _timer;
         /// <summary>
         /// дистанция "остановки" бота.
         /// </summary>
-        [SerializeField] private float _stoppingDist = 2;
+        private float _stoppingDist = 2;
         /// <summary>
         /// Массив точек для патруля.
         /// </summary>
         private Transform[] _points;
+
         /// <summary>
         /// Проверка - патрулирует территорию или нет.
         /// </summary>
-        public bool IsPatrol { get; private set; }
+        public bool IsPatrol { get; private set; } = true;
         /// <summary>
-        /// Проверка - преследует игрока или нет.
+        /// Проверка - "ВИЖУ" игрока или нет.
         /// </summary>
-        public bool IsAngry { get; private set; }
+        public bool IsSawThePlayer { get; private set; }
+        /// <summary>
+        /// Проверка - "Слышу" игрока или нет.
+        /// </summary>
+        public bool IsHearingThePlayer { get; private set; }
         /// <summary>
         /// Порядковый номер "цели" патруля.
         /// </summary>
         private int _numberOfTarget;
-        private Vision _vision;
+        [SerializeField] private Vision _vision;
 
         /// <summary>
         /// Класс "Патруль"
@@ -47,63 +56,93 @@ namespace Assets.Scripts
             _player = player;
             _bot = bot;
             _agent = _bot.GetComponent<NavMeshAgent>();
-            _timer = new Timer();
-
-            IsAngry = false;
-            IsPatrol = true;
+            _agent.stoppingDistance = _stoppingDist;
         }
-
         public void Update()
         {
-            Patrolling();
             CheckTheStates();
+        }
+
+
+        /// <summary>
+        /// Метод проверки дистанции между двумя 'Transform'
+        /// </summary>
+        /// <param name="one">первый 'Transform'</param>
+        /// <param name="two">второй 'Transform'</param>
+        /// <returns></returns>
+        private float CheckDistance(Transform one, Transform two)
+        {
+            return (one.position - two.position).sqrMagnitude;
+        }
+        /// <summary>
+        /// Метод "Патруль".
+        /// </summary>
+        public IEnumerator Patrolling()
+        {
+            if (_numberOfTarget >= _points.Length)
+            {
+                _numberOfTarget = 0;
+            }
+
+            if (CheckDistance(_bot, _points[_numberOfTarget]) <= _stoppingDist)
+            {
+                _numberOfTarget++;
+                IsPatrol = true;
+            }
+
+            if (IsPatrol)
+            {
+                for (int i = _numberOfTarget; i < _points.Length;)
+                {
+                    if (i >= _points.Length) i = 0;
+
+                    _agent.SetDestination(_points[_numberOfTarget].position);
+                    Debug.Log("Бот - Иду до точки" + _points[_numberOfTarget].name);
+                    IsPatrol = false;
+                    yield break;
+                }
+            }
+        }
+
+        public IEnumerator Alert()
+        {
+            if (IsHearingThePlayer)
+            {
+                Debug.Log("Бот - Слышу Игрока");
+                IsPatrol = false;
+                _bot.transform.Rotate(_bot.rotation.x, -3f, _bot.transform.rotation.z);
+                yield break;
+            }
+            if (!IsHearingThePlayer && !IsPatrol)
+            {
+                Debug.Log("Бот - Потерял Игрока");
+                IsPatrol = true;
+                IsSawThePlayer = false;
+                yield break;
+            }
+        }
+
+        public IEnumerator Attacking()
+        {
+            if (IsSawThePlayer)
+            {
+                Debug.Log("Бот - Вижу Игрока");
+                _agent.SetDestination(_player.position);
+                yield break;
+            }
         }
         /// <summary>
         /// Проверка состояний патрулирования.
         /// </summary>
         private void CheckTheStates()
         {
-            if (IsPatrol && !_agent.hasPath)
+            IsHearingThePlayer = _vision.CheckHearing(_bot, _player);
+            if (IsHearingThePlayer)
             {
-                Debug.Log("Таймер - время пошло");
-                _timer.Start(1);
-                IsPatrol = false;
-            }
-            if (_timer.IsEvent())
-            {
-                Debug.Log("Таймер - время вышло");
-                _numberOfTarget++;
-                IsPatrol = true;
+                IsSawThePlayer = _vision.CheckVision(_bot, _player);
             }
 
-            if (_numberOfTarget >= 4) _numberOfTarget = 0;
-
-            IsAngry = _vision.CheckVision(_bot, _player);
-            if (IsAngry)
-            {
-                IsPatrol = false;
-            }
-        }
-        /// <summary>
-        /// Метод "Патруль".
-        /// </summary>
-        private void Patrolling()
-        {
-            _agent.stoppingDistance = _stoppingDist;
-            if (IsPatrol && _points != null)
-            {
-                Debug.Log("Бот - Иду до точки" + _points[_numberOfTarget].name);
-                _agent.SetDestination(_points[_numberOfTarget].position);
-            }
-            if (IsAngry)
-            {
-                Debug.Log("Нашел Игрока!");
-                _agent.SetDestination(_player.position);
-            }
-        }
-        private float CheckDistance(Transform one, Transform two)
-        {
-            return (one.position - two.position).sqrMagnitude;
+            _distance = CheckDistance(_bot, _player);
         }
     }
 }

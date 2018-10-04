@@ -16,6 +16,10 @@ namespace Assets.Scripts.Controllers
             {
                 _weapon.Fire();
             }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _weapon.Reload();
+            }
         }
 
         public void On(Weapon weapon)

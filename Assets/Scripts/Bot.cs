@@ -3,6 +3,9 @@ using UnityEngine.AI;
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    /// Класс 'Bot'
+    /// </summary>
     public class Bot : BaseObjectScene, ISetDamage
     {
         [SerializeField] private Transform _targetPlayer;
@@ -13,17 +16,13 @@ namespace Assets.Scripts
         [SerializeField] private Transform _point4;
         private Transform[] _targetPoints;
 
-        private Patrol _patrol;
+        [SerializeField] private Patrol _patrol;
         private float _hp;
         /// <summary>
         /// Проверка на "смерть".
         /// </summary>
         private bool _isDeath;
-        /// <summary>
-        /// "Вижу Игрока".
-        /// </summary>
-        public bool _botIsAngry;
-
+        
         #region Properties
 
         public float Hp
@@ -50,7 +49,9 @@ namespace Assets.Scripts
         private void Update()
         {
             _patrol.Update();
-            _botIsAngry = _patrol.IsAngry;
+            StartCoroutine(_patrol.Patrolling());
+            StartCoroutine(_patrol.Alert());
+            StartCoroutine(_patrol.Attacking());
         }
 
 

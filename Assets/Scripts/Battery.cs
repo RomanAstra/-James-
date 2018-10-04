@@ -2,11 +2,14 @@
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    /// Класс "Батарейка"
+    /// </summary>
     public class Battery : MonoBehaviour
     {
-        [SerializeField] public float Energy { get; set; }
-        [SerializeField] public bool IsEmpty { get; set; }
-        [SerializeField] public bool IsOn { get; set; }
+        public float Energy { get; set; }
+        public bool IsEmpty { get; set; }
+        public bool IsOn { get; set; }
 
         private void Awake()
         {
@@ -14,8 +17,6 @@ namespace Assets.Scripts
             IsEmpty = false;
             IsOn = false;
         }
-
-
         private void Update()
         {
             if (IsOn) Energy += Time.deltaTime;

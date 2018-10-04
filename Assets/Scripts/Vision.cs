@@ -2,21 +2,24 @@
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    /// Класс "Обзор" у бота. Содержит методы проверки на "видимость" и "слышимость"
+    /// </summary>
     [System.Serializable]
     public class Vision
     {
-        [SerializeField] private float _distanceOfView = 20;
-        [SerializeField] private float _angleOfView = 30;
+        [SerializeField] public float DistanceOfView { get; private set; } = 20;
+        [SerializeField] public float AngleOfView { get; private set; } = 30;
         /// <summary>
         /// Проверка дистанции от бота до игрока.
         /// </summary>
         /// <param name="bot"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        private bool _CheckDictanceOfView(Transform bot,Transform target)
+        private bool _CheckDictanceOfView(Transform bot, Transform target)
         {
             var _distance = (bot.position - target.position).sqrMagnitude;
-            return _distance <= _distanceOfView;
+            return _distance <= DistanceOfView;
         }
         /// <summary>
         /// Проверка угла обзора бота.
@@ -26,8 +29,8 @@ namespace Assets.Scripts
         /// <returns></returns>
         private bool _CheckAngleOfView(Transform bot, Transform target)
         {
-            var _angle= Vector3.Angle(bot.forward, bot.position - target.position);
-            return _angle <= _angleOfView;
+            var _angle = Vector3.Angle(-bot.forward, bot.position - target.position);
+            return _angle <= AngleOfView;
         }
         /// <summary>
         /// Проверка - "слышит" БОТ игрока или нет.
@@ -47,7 +50,7 @@ namespace Assets.Scripts
         /// <returns></returns>
         public bool CheckVision(Transform bot, Transform player)
         {
-            return _CheckAngleOfView(bot, player) && CheckHearing(bot, player);
+            return CheckHearing(bot, player) && _CheckAngleOfView(bot, player);
         }
     }
 }

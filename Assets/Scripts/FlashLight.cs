@@ -2,10 +2,14 @@
 
 namespace Assets.Scripts
 {
+    /// <summary>
+    /// Класс "Фонарь"
+    /// </summary>
+    [System.Serializable]
     public class FlashLight : BaseObjectScene
     {
         [SerializeField] private Light _light;
-        [SerializeField]private Battery _battery;
+        [SerializeField] private Battery _battery;
 
         public Battery GetBattery
         {
@@ -14,7 +18,6 @@ namespace Assets.Scripts
 
         protected override void Awake()
         {
-            _battery = FindObjectOfType<Battery>();
             _light = GetComponent<Light>();
             base.Awake();
         }
@@ -23,7 +26,9 @@ namespace Assets.Scripts
         {
             if (_battery.IsEmpty) Switch(false);
         }
-
+        /// <summary>
+        /// Метод - переключает фонарь ВКЛ\ВЫКЛ
+        /// </summary>
         public void Switch(bool value)
         {
             if (!_battery) return;

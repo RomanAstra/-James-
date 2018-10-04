@@ -3,10 +3,14 @@ using Input = UnityEngine.Input;
 
 namespace Assets.Scripts.Controllers
 {
+    /// <summary>
+    /// Контроллер игрока, нажатие клавиш
+    /// </summary>
+    [System.Serializable]
     public class InputController : BaseController
     {
-        [SerializeField] private float _zoom;
         [SerializeField] private int _weaponID = 2;
+        private float _zoom;
         private bool _flashIsOn;
 
         private void Update()
@@ -19,15 +23,22 @@ namespace Assets.Scripts.Controllers
 
             _zoom = Input.GetAxis("Mouse ScrollWheel");
             if (_zoom > 0 || _zoom < 0) SelectWeapon();
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                
+            }
         }
 
         private void SelectFlashLight(bool value)
         {
-            if(Main.Instance.FlashLightController._FlashLight.GetBattery.IsEmpty) return;
+            if(Main.Instance.FlashLightController.FlashLight1.GetBattery.IsEmpty) return;
             if(value) Main.Instance.FlashLightController.On();
             if(!value) Main.Instance.FlashLightController.Off();
         }
-
+        /// <summary>
+        /// Метод "Выбор оружия"
+        /// </summary>
         private void SelectWeapon()
         {
             Main.Instance.WeaponController.Off();
@@ -35,6 +46,9 @@ namespace Assets.Scripts.Controllers
             var tempWeapons = Main.Instance.ObjectManager.Weapons[_weaponID - 1];
             if (tempWeapons != null) Main.Instance.WeaponController.On(tempWeapons);
         }
+        /// <summary>
+        /// Вспомогательный метод
+        /// </summary>
         private void CheckWeaponId()
         {
             _weaponID++;

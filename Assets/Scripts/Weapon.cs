@@ -8,18 +8,47 @@ namespace Assets.Scripts
         [SerializeField] private Transform _bulletProjector;
         [SerializeField] protected Transform _barrelCamera;
         [SerializeField] protected float maxClip;
+        /// <summary>
+        /// 'Quaternion'-значение. Вращение луча выстрела
+        /// </summary>
         [Space(20)]
         protected Quaternion _hitRotation;
+        /// <summary>
+        /// Луч "Выстрела"
+        /// </summary>
         protected RaycastHit Hit;
         protected Timer timer = new Timer();
+        /// <summary>
+        /// Информация об оружии
+        /// </summary>
         protected InfoCollision _info;
+        /// <summary>
+        /// Время, промежуток между выстрелами
+        /// </summary>
         protected float _rechargeTime;
+        /// <summary>
+        /// Общая обоима
+        /// </summary>
         protected float _holder;
+        /// <summary>
+        /// Текущая обоима
+        /// </summary>
         protected float _curHolder;
+        /// <summary>
+        /// "Стандартная" для каждого класса оружия величина обоимы
+        /// </summary>
         protected float _standartHolder;
+        /// <summary>
+        /// Дистанция луча "Выстрела"
+        /// </summary>
         protected float _maxDistance = 500;
+        /// <summary>
+        /// Величина урона
+        /// </summary>
         protected float _damage = 10;
-
+        /// <summary>
+        /// Проверка, готово ли оружие к "Выстрелу"
+        /// </summary>
         protected bool _IsReady = true;
 
         protected virtual void Awake()
@@ -29,25 +58,30 @@ namespace Assets.Scripts
 
             _info = new InfoCollision(_damage, new RaycastHit(), _barrelCamera);
         }
-
         protected virtual void Update()
         {
-            timer.Update();
-            if (timer.IsEvent())
+            if (_curHolder > 0)
             {
-                _IsReady = true;
+                timer.Update();
+                if (timer.IsEvent())
+                {
+                    _IsReady = true;
+                }
+            }
+                
+            if(_curHolder <= 0)
+            {
+                _IsReady = false;
             }
         }
+
+
         /// <summary>
-        /// "Выстрел"
+        /// "Выстрел"(базовый)
         /// </summary>
         public virtual void Fire()
         {
             if (!_IsReady) return;
-            if (_curHolder <= 0)
-            {
-                Reload();
-            }
 
             if (_IsReady)
             {
@@ -64,19 +98,6 @@ namespace Assets.Scripts
                     _curHolder--;
                     maxClip = _holder + _curHolder;
                 }
-
-                //if (_barrelCamera != null && Physics.Raycast(_barrelCamera.position, _barrelCamera.forward, out Hit, _maxDistance))
-                //{
-                //    Debug.Log("Выстрел");
-                //    _info.Hit = Hit;
-                //    if (Hit.transform.gameObject.GetComponent<Wall>()!=null) Hit.transform.gameObject.GetComponent<Wall>().SetDamage(_info);
-
-                //    _IsReady = false;
-                //    timer.Start(_rechargeTime);
-                //    _curHolder--;
-                //    maxClip = _holder + _curHolder;
-                //}
-
                 else
                 {
                     Debug.Log("Мимо!");
@@ -84,13 +105,10 @@ namespace Assets.Scripts
             }
         }
         /// <summary>
-        /// Перезерядка
+        /// Перезерядка(базовая)
         /// </summary>
-        protected virtual void Reload()
+        public virtual void Reload()
         {
-            _IsReady = false;
-            timer.Start(1);
-
             _holder -= _curHolder;
             if (_holder > _standartHolder)
             {
@@ -101,6 +119,6 @@ namespace Assets.Scripts
             _curHolder = _holder;
             _holder -= _curHolder;
         }
-        
+
     }
 }

@@ -14,7 +14,9 @@ namespace Assets.Scripts
         public WeaponController WeaponController { get; private set; }
         public ObjectManager ObjectManager { get; private set; }
         public FlashLightController FlashLightController { get; private set; }
-        
+        /// <summary>
+        /// Статический класс "Инициализации", в нем хранятся контроллеры
+        /// </summary>
         public static Main Instance { get; private set; }
 
         private void Awake()
